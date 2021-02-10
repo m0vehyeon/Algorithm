@@ -1,41 +1,45 @@
 package com.ssafy.bj;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main_bj_10972_다음순열_구미_4_이동현 {
-	static int N;
-	static int[] num;
-	static int[] comp;
-	static boolean[] visit;
-	static boolean check1 = true;
-	static boolean check2 = true;
+	// 뒤에서부터 탐색하면서 오름차순이 깨지는 인덱스를 확인
+	// 다시 뒤에서부터 탐색하면서 a보다 큰 첫번째 인덱스를 확인
+	// a랑 b를 스왑
+	// a+1에서부터 끝까지를 오름차순 정렬
+	static int[] arr;
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
-		num = new int[N];
-		visit = new boolean[N+1];
-		comp = new int[N];
-		/*for (int i = 0; i < N; i++) {
-			comp[i] = sc.nextInt();
-		}*/
-		permutation(0);
+		int N = sc.nextInt();
+		arr = new int[N];
+		for (int i = 0; i < N; i++) {
+			arr[i] = sc.nextInt();
+		}
+		if (next_permutation() == -1) System.out.println(-1);
+		else for (int i = 0; i < N; i++) System.out.print(arr[i] + " ");
 	}
 	
-	static void permutation(int cnt) {
-		if (cnt == N) {
-			for (int i = 0; i < N; i++) System.out.print(num[i] + " ");
-			System.out.println();
-			return;
+	static int next_permutation() {
+		int i;
+		for (i = arr.length - 2; i >=0; i--) {
+			if (arr[i] < arr[i + 1] ) break;
 		}
-		for (int i = 1; i <= N; i++) {
-			if (visit[i]) continue;
-			num[cnt] = i;
-			visit[i] = true;
-			permutation(cnt+1);
-			visit[i] = false;
-		}
+		if (i != -1) {
+			for (int j = arr.length - 1; j >= 0; j--) {
+				if (arr[i] < arr[j]) {
+					swap(arr,i,j);
+					break;
+				}
+			}
+			Arrays.sort(arr, i + 1, arr.length);
+		} else return -1;
+		
+		return 1;
+	}
+	static void swap(int[] arr, int a, int b) {
+		int tmp = arr[a];
+		arr[a] = arr[b];
+		arr[b] = tmp;
 	}
 }
