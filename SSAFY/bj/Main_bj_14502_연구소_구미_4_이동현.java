@@ -8,6 +8,7 @@ public class Main_bj_14502_연구소_구미_4_이동현 {
 	static int map[][], tmap[][];
 	static int nums[];
 	static List<int[]> blank;
+	static List<int[]> viruses;
 	static boolean[][] visited;
 	static int[] dx = {-1,1,0,0};
 	static int[] dy = {0,0,-1,1};
@@ -18,11 +19,13 @@ public class Main_bj_14502_연구소_구미_4_이동현 {
 		M = stoi(st.nextToken());
 		map = new int[N][M];
 		blank = new ArrayList<>();
+		viruses = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for (int j = 0; j < M; j++) {
 				map[i][j] = stoi(st.nextToken());
 				if (map[i][j] == 0) blank.add(new int[] {i,j});
+				else if (map[i][j] == 2) viruses.add(new int[] {i,j});
 			}
 		}
 		bSize = blank.size();
@@ -33,14 +36,7 @@ public class Main_bj_14502_연구소_구미_4_이동현 {
 	static void combi(int cnt, int idx) {
 		if (cnt == 3) {
 			init();
-			
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < M; j++) {
-					if (tmap[i][j] == 2) {
-						bfs(i,j);
-					}
-				}
-			}
+			bfs();
 			max = Math.max(max, safeCount());
 			return;
 		}
@@ -49,9 +45,10 @@ public class Main_bj_14502_연구소_구미_4_이동현 {
 			combi(cnt+1,i);
 		}
 	}
-	static void bfs(int x, int y) {
+	static void bfs() {
 		Queue<int[]> q = new LinkedList<int[]>();
-		q.offer(new int[] {x,y});
+		for (int i = 0; i < viruses.size(); i++) q.offer(viruses.get(i));
+		
 		while(!q.isEmpty()) {
 			int[] cur = q.poll();
 			int tx = cur[0];
